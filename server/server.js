@@ -21,7 +21,8 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 // Route files here..
-//
+const auth = require("./routes/auth");
+const users = require("./routes/users");
 
 const app = express();
 
@@ -65,11 +66,8 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routers
-//
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use("/api/auth", auth);
+app.use("/api/users", users);
 
 app.use(errorHandler);
 

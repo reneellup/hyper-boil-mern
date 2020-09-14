@@ -23,6 +23,8 @@ connectDB();
 // Route files here..
 const auth = require("./routes/auth");
 const users = require("./routes/users");
+const tasks = require("./routes/tasks");
+const taskItems = require("./routes/taskItems");
 
 const app = express();
 
@@ -68,6 +70,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // Mount routers
 app.use("/api/auth", auth);
 app.use("/api/users", users);
+app.use("/api/tasks", tasks);
+app.use("/api/taskItems", taskItems);
 
 app.use(errorHandler);
 

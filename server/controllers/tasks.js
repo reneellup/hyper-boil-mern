@@ -141,7 +141,7 @@ exports.deleteTask = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Make sure user is bootcamp owner
+  // Make sure user is task owner
   if (task.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(

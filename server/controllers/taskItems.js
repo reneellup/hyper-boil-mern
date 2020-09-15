@@ -36,7 +36,7 @@ exports.getTaskItems = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      count: courses.length,
+      count: taskItems.length,
       data: taskItems,
     });
   }

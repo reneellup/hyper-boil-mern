@@ -18,7 +18,7 @@ const TaskSchema = new mongoose.Schema(
   }
 );
 
-// Cascade delete courses when a bootcamp is deleted
+// Cascade delete task items when a task is deleted
 TaskSchema.pre("remove", async function (next) {
   console.log(`Task items being removed from task ${this._id}`);
   await this.model("TaskItem").deleteMany({ taskId: this._id });

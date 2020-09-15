@@ -23,7 +23,10 @@ router
     advancedResults(TaskItem, "taskItems"),
     getAllTaskItems
   )
-  .get(protect, authorize("user", "admin"), getTaskItems)
+  .get(protect, authorize("user", "admin"), getTaskItems);
+
+router
+  .route("/add/:taskId")
   .post(protect, authorize("user", "admin"), addTaskItem);
 
 router

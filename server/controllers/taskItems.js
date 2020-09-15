@@ -10,7 +10,7 @@ exports.getAllTaskItems = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
-// @desc      Get taskItems
+// @desc      Get task items by taskId
 // @route     GET /api/tasks/:taskId/taskItems
 // @access    Private
 exports.getTaskItems = asyncHandler(async (req, res, next) => {
@@ -42,15 +42,23 @@ exports.getTaskItems = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc      Get single taskItem
+// @desc      Get single task item
 // @route     GET /api/taskItems/:id
 // @access    Private
 exports.getTaskItem = asyncHandler(async (req, res, next) => {
-  const task = await Task.findById(req.params.id);
+  const taskItem = await TaskItem.findById(req.params.id);
+
+  if (!taskItem) {
+    return next(
+      new ErrorResponse(`No item with the id of ${req.params.id}`, 404)
+    );
+  }
+
+  const task = await Task.findById(taskItem.taskId);
 
   if (!task) {
     return next(
-      new ErrorResponse(`Task not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Task not found with id of ${taskItem.taskId}`, 404)
     );
   }
 
@@ -63,13 +71,6 @@ exports.getTaskItem = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  const taskItem = await TaskItem.findById(req.params.id);
-
-  if (!taskItem) {
-    return next(
-      new ErrorResponse(`No item with the id of ${req.params.id}`, 404)
-    );
-  }
 
   res.status(200).json({
     success: true,
@@ -78,10 +79,10 @@ exports.getTaskItem = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Add task item
-// @route     POST /api/tasks/:taskId/taskItems
+// @route     POST /api/taskItems/add/:taskId
 // @access    Private
 exports.addTaskItem = asyncHandler(async (req, res, next) => {
-  req.body.task = req.params.taskId;
+  req.body.taskId = req.params.taskId;
   req.body.user = req.user.id;
 
   const task = await Task.findById(req.params.taskId);
@@ -96,7 +97,7 @@ exports.addTaskItem = asyncHandler(async (req, res, next) => {
   if (task.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to add an item to task ${bootcamp._id}`,
+        `User ${req.user.id} is not authorized to add an item to task ${task._id}`,
         401
       )
     );

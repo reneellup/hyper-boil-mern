@@ -1,4 +1,5 @@
 const express = require("express");
+const { validatorRules, validate } = require("../middleware/validator");
 const {
   register,
   login,
@@ -15,7 +16,7 @@ const router = express.Router();
 
 const { protect } = require("../middleware/auth");
 
-router.post("/register", register);
+router.post("/register", validatorRules("users"), validate, register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/me", protect, getMe);

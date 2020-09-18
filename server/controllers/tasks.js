@@ -1,6 +1,7 @@
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Task = require("../models/Task");
+const { check, validationResult } = require("express-validator");
 
 // @desc      Get all tasks
 // @route     GET /api/tasks
@@ -14,7 +15,7 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
 // @access    Private/Admin
 exports.getTask = asyncHandler(async (req, res, next) => {
   const task = await Task.findById(req.params.id).populate({
-    path: "taskItem",
+    path: "items",
     select: "stepNo item",
   });
 

@@ -1,4 +1,5 @@
 const express = require("express");
+const { validatorRules, validate } = require("../middleware/validator");
 const {
   getAllTaskItems,
   getTaskItems,
@@ -27,12 +28,24 @@ router
 
 router
   .route("/add/:taskId")
-  .post(protect, authorize("user", "admin"), addTaskItem);
+  .post(
+    validatorRules("taskItems"),
+    validate,
+    protect,
+    authorize("user", "admin"),
+    addTaskItem
+  );
 
 router
   .route("/:id")
   .get(protect, authorize("user", "admin"), getTaskItem)
-  .put(protect, authorize("user", "admin"), updateTaskItem)
+  .put(
+    validatorRules("taskItems"),
+    validate,
+    protect,
+    authorize("user", "admin"),
+    updateTaskItem
+  )
   .delete(protect, authorize("user", "admin"), deleteTaskItem);
 
 module.exports = router;

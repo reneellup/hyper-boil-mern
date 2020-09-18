@@ -1,8 +1,9 @@
 const express = require("express");
+const { validatorRules, validate } = require("../middleware/validator");
 const {
   getUsers,
   getUser,
-  createUser,
+  // createUser,
   updateUser,
   deleteUser,
 } = require("../controllers/users");
@@ -24,8 +25,13 @@ router.use("/:userId/tasks/:id", taskRouter);
 router.use(protect);
 router.use(authorize("admin"));
 
-router.route("/").get(advancedResults(User), getUsers).post(createUser);
+router.route("/").get(advancedResults(User), getUsers);
+// .post(validatorRules("users"), validate, createUser);
 
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router
+  .route("/:id")
+  .get(getUser)
+  .put(validatorRules("users"), validate, updateUser)
+  .delete(deleteUser);
 
 module.exports = router;

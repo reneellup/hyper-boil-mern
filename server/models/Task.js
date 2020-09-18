@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const TaskSchema = new mongoose.Schema(
   {
-    description: { type: String, required: [true, "Please add a description"] },
+    description: { type: String },
     dueDate: {
       type: Date,
       default: new Date(+new Date() + 1 * 24 * 60 * 60 * 1000),
